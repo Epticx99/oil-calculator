@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy & Supply Chain Analytics Tool</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f1f5f9; color: #0f172a; padding: 40px 20px; display: flex; justify-content: center; }
+        .card { background: white; max-width: 500px; width: 100%; padding: 32px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        h1 { font-size: 1.5rem; margin-bottom: 6px; color: #0f172a; }
+        p.subtitle { font-size: 0.875rem; color: #64748b; margin-bottom: 24px; }
+        .input-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 6px; }
+        input { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
+        input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .results { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .stat-box { background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #f1f5f9; }
+        .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600; margin-bottom: 4px; }
+        .stat-value { font-size: 1.25rem; font-weight: 700; color: #16a34a; }
+        .stat-value.dark { color: #0f172a; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Energy Supply Chain Engine</h1>
+    <p class="subtitle">Crude Oil Pipeline vs. Rail Logistics & Payback Model</p>
+
+    <div class="input-group">
+        <label>Daily Oil Volume (Barrels / Day)</label>
+        <input type="number" id="bpd" value="50000" oninput="calculate()">
+    </div>
+    <div class="input-group">
+        <label>Rail Freight Cost ($ / Barrel)</label>
+        <input type="number" id="railCost" value="6.50" step="0.10" oninput="calculate()">
+    </div>
+    <div class="input-group">
+        <label>Pipeline Tariff ($ / Barrel)</label>
+        <input type="number" id="pipeCost" value="2.50" step="0.10" oninput="calculate()">
+    </div>
+    <div class="input-group">
+        <label>Pipeline Construction Cost ($ CapEx)</label>
+        <input type="number" id="capex" value="120000000" oninput="calculate()">
+    </div>
+
+    <div class="results">
+        <div class="stat-box">
+            <div class="stat-label">Annual Savings</div>
+            <div class="stat-value" id="savings">$0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">Payback Period</div>
+            <div class="stat-value dark" id="payback">0 Years</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function calculate() {
+    const bpd = parseFloat(document.getElementById('bpd').value) || 0;
+    const rail = parseFloat(document.getElementById('railCost').value) || 0;
+    const pipe = parseFloat(document.getElementById('pipeCost').value) || 0;
+    const capex = parseFloat(document.getElementById('capex').value) || 0;
+
+    const annualBarrels = bpd * 365;
+    const annualSavings = annualBarrels * (rail - pipe);
+    const payback = annualSavings > 0 ? (capex / annualSavings) : 0;
+
+    document.getElementById('savings').innerText = '$' + Math.round(annualSavings).toLocaleString();
+    document.getElementById('payback').innerText = payback.toFixed(2) + ' Years';
+}
+calculate();
+</script>
+
+</body>
+</html>
